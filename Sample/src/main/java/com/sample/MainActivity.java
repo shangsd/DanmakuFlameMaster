@@ -35,7 +35,7 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import master.flame.danmaku.controller.IDanmakuView;
+import master.flame.danmaku.controller.IDanMuView;
 import master.flame.danmaku.danmaku.loader.ILoader;
 import master.flame.danmaku.danmaku.loader.IllegalDataException;
 import master.flame.danmaku.danmaku.loader.android.DanmakuLoaderFactory;
@@ -53,7 +53,7 @@ import master.flame.danmaku.danmaku.util.IOUtils;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
-    private IDanmakuView mDanmakuView;
+    private IDanMuView mDanmakuView;
 
     private View mMediaController;
 
@@ -217,7 +217,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         overlappingEnablePair.put(BaseDanmaku.TYPE_SCROLL_RL, true);
         overlappingEnablePair.put(BaseDanmaku.TYPE_FIX_TOP, true);
 
-        mDanmakuView = (IDanmakuView) findViewById(R.id.sv_danmaku);
+        mDanmakuView = (IDanMuView) findViewById(R.id.sv_danmaku);
         mContext = DanmakuContext.create();
         mContext.setDanmakuStyle(IDisplayer.DANMAKU_STYLE_STROKEN, 3).setDuplicateMergingEnabled(false).setScrollSpeedFactor(1.2f).setScaleTextSize(1.2f)
         .setCacheStuffer(new SpannedCacheStuffer(), mCacheStufferAdapter) // 图文混排使用SpannedCacheStuffer
@@ -246,7 +246,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     mDanmakuView.start();
                 }
             });
-            mDanmakuView.setOnDanmakuClickListener(new IDanmakuView.OnDanmakuClickListener() {
+            mDanmakuView.setOnDanmakuClickListener(new IDanMuView.OnDanmakuClickListener() {
 
                 @Override
                 public boolean onDanmakuClick(IDanmakus danmakus) {
@@ -265,7 +265,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 }
 
                 @Override
-                public boolean onViewClick(IDanmakuView view) {
+                public boolean onViewClick(IDanMuView view) {
                     mMediaController.setVisibility(View.VISIBLE);
                     return false;
                 }

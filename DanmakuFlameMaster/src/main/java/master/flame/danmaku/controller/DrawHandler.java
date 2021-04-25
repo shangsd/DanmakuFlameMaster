@@ -102,7 +102,7 @@ public class DrawHandler extends Handler {
 
     public IDrawTask drawTask;
 
-    private IDanmakuViewController mDanmakuView;
+    private IDanMuViewController mDanmakuView;
 
     private boolean mDanmakusVisible = true;
 
@@ -143,7 +143,7 @@ public class DrawHandler extends Handler {
 
     private boolean mNonBlockModeEnable;
 
-    public DrawHandler(Looper looper, IDanmakuViewController view, boolean danmakuVisibile) {
+    public DrawHandler(Looper looper, IDanMuViewController view, boolean danmakuVisibile) {
         super(looper);
         mIdleSleep = !DeviceUtils.isProblemBoxDevice();
         bindView(view);
@@ -155,7 +155,7 @@ public class DrawHandler extends Handler {
         mDanmakusVisible = danmakuVisibile;
     }
 
-    private void bindView(IDanmakuViewController view) {
+    private void bindView(IDanMuViewController view) {
         this.mDanmakuView = view;
     }
 
@@ -229,7 +229,7 @@ public class DrawHandler extends Handler {
                     }
                 }
                 if (quitFlag && mDanmakuView != null) {
-                    mDanmakuView.drawDanmakus();
+                    mDanmakuView.drawDanMu();
                 }
                 notifyRendering();
                 if (!resume) {
@@ -348,7 +348,7 @@ public class DrawHandler extends Handler {
             case UPDATE_WHEN_PAUSED:
                 if (quitFlag && mDanmakuView != null) {
                     drawTask.requestClear();
-                    mDanmakuView.drawDanmakus();
+                    mDanmakuView.drawDanMu();
                     notifyRendering();
                 }
                 break;
@@ -392,7 +392,7 @@ public class DrawHandler extends Handler {
             sendEmptyMessageDelayed(UPDATE, 60 - d);
             return;
         }
-        d = mDanmakuView.drawDanmakus();
+        d = mDanmakuView.drawDanMu();
         removeMessages(UPDATE);
         if (d > mCordonTime2) {  // this situation may be cuased by ui-thread waiting of DanmakuView, so we sync-timer at once
             timer.add(d);
@@ -439,7 +439,7 @@ public class DrawHandler extends Handler {
                         SystemClock.sleep(60 - d);
                         continue;
                     }
-                    d = mDanmakuView.drawDanmakus();
+                    d = mDanmakuView.drawDanMu();
                     if (d > mCordonTime2) {  // this situation may be cuased by ui-thread waiting of DanmakuView, so we sync-timer at once
                         timer.add(d);
                         mDrawTimes.clear();
@@ -479,7 +479,7 @@ public class DrawHandler extends Handler {
             removeMessages(UPDATE);
             return;
         }
-        d = mDanmakuView.drawDanmakus();
+        d = mDanmakuView.drawDanMu();
         removeMessages(UPDATE);
         if (d > mCordonTime2) {  // this situation may be cuased by ui-thread waiting of DanmakuView, so we sync-timer at once
             timer.add(d);
@@ -563,7 +563,7 @@ public class DrawHandler extends Handler {
 
     private void prepare(final Runnable runnable) {
         if (drawTask == null) {
-            drawTask = createDrawTask(mDanmakuView.isDanmakuDrawingCacheEnabled(), timer,
+            drawTask = createDrawTask(mDanmakuView.isDanMuDrawingCacheEnabled(), timer,
                     mDanmakuView.getContext(), mDanmakuView.getViewWidth(), mDanmakuView.getViewHeight(),
                     mDanmakuView.isHardwareAccelerated(), new IDrawTask.TaskListener() {
                         @Override
