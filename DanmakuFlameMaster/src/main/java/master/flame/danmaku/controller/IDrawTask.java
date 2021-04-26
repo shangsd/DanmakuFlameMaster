@@ -61,6 +61,10 @@ public interface IDrawTask {
 
     void invalidateDanmaku(BaseDanmaku item, boolean remeasure);
 
+    void requestHide();
+
+    void requestRender();
+
     interface TaskListener {
         void ready();
 
@@ -72,9 +76,5 @@ public interface IDrawTask {
 
         void onDanmakusDrawingFinished();
     }
-
-    void requestHide();
-
-    void requestRender();
 
 }
