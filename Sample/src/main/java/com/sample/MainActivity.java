@@ -4,19 +4,15 @@ package com.sample;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
-import master.flame.danmaku.danmaku.util.SystemClock;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
-import android.text.TextPaint;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ImageSpan;
 import android.util.Log;
@@ -36,9 +32,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import master.flame.danmaku.controller.IDanMuView;
-import master.flame.danmaku.danmaku.loader.ILoader;
-import master.flame.danmaku.danmaku.loader.IllegalDataException;
-import master.flame.danmaku.danmaku.loader.android.DanmakuLoaderFactory;
 import master.flame.danmaku.danmaku.model.BaseDanmaku;
 import master.flame.danmaku.danmaku.model.DanmakuTimer;
 import master.flame.danmaku.danmaku.model.IDanmakus;
@@ -48,8 +41,8 @@ import master.flame.danmaku.danmaku.model.android.DanmakuContext;
 import master.flame.danmaku.danmaku.model.android.Danmakus;
 import master.flame.danmaku.danmaku.model.android.SpannedCacheStuffer;
 import master.flame.danmaku.danmaku.parser.BaseDanmakuParser;
-import master.flame.danmaku.danmaku.parser.IDataSource;
 import master.flame.danmaku.danmaku.util.IOUtils;
+import master.flame.danmaku.danmaku.util.SystemClock;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
@@ -92,7 +85,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         String url = "http://www.bilibili.com/favicon.ico";
                         InputStream inputStream = null;
                         Drawable drawable = mDrawable;
-                        if(drawable == null) {
+                        if (drawable == null) {
                             try {
                                 URLConnection urlConnection = new URL(url).openConnection();
                                 inputStream = urlConnection.getInputStream();
@@ -110,7 +103,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                             drawable.setBounds(0, 0, 100, 100);
                             SpannableStringBuilder spannable = createSpannable(drawable);
                             danmaku.text = spannable;
-                            if(mDanmakuView != null) {
+                            if (mDanmakuView != null) {
                                 mDanmakuView.invalidateDanmaku(danmaku, false);
                             }
                             return;
@@ -126,30 +119,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
     };
 
-    /**
-     * 绘制背景(自定义弹幕样式)
-     */
-    private static class BackgroundCacheStuffer extends SpannedCacheStuffer {
-        // 通过扩展SimpleTextCacheStuffer或SpannedCacheStuffer个性化你的弹幕样式
-        final Paint paint = new Paint();
 
-        @Override
-        public void measure(BaseDanmaku danmaku, TextPaint paint, boolean fromWorkerThread) {
-            danmaku.padding = 10;  // 在背景绘制模式下增加padding
-            super.measure(danmaku, paint, fromWorkerThread);
-        }
-
-        @Override
-        public void drawBackground(BaseDanmaku danmaku, Canvas canvas, float left, float top) {
-            paint.setColor(0x8125309b);
-            canvas.drawRect(left + 2, top + 2, left + danmaku.paintWidth - 2, top + danmaku.paintHeight - 2, paint);
-        }
-
-        @Override
-        public void drawStroke(BaseDanmaku danmaku, String lineText, Canvas canvas, float left, float top, Paint paint) {
-            // 禁用描边绘制
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,27 +130,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private BaseDanmakuParser createParser(InputStream stream) {
 
-        if (stream == null) {
-            return new BaseDanmakuParser() {
+        return new BaseDanmakuParser() {
 
-                @Override
-                protected Danmakus parse() {
-                    return new Danmakus();
-                }
-            };
-        }
-
-        ILoader loader = DanmakuLoaderFactory.create(DanmakuLoaderFactory.TAG_BILI);
-
-        try {
-            loader.load(stream);
-        } catch (IllegalDataException e) {
-            e.printStackTrace();
-        }
-        BaseDanmakuParser parser = new BiliDanmukuParser();
-        IDataSource<?> dataSource = loader.getDataSource();
-        parser.load(dataSource);
-        return parser;
+            @Override
+            protected Danmakus parse() {
+                return new Danmakus();
+            }
+        };
 
     }
 
@@ -220,10 +176,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
         mDanmakuView = (IDanMuView) findViewById(R.id.sv_danmaku);
         mContext = DanmakuContext.create();
         mContext.setDanmakuStyle(IDisplayer.DANMAKU_STYLE_STROKEN, 3).setDuplicateMergingEnabled(false).setScrollSpeedFactor(1.2f).setScaleTextSize(1.2f)
-        .setCacheStuffer(new SpannedCacheStuffer(), mCacheStufferAdapter) // 图文混排使用SpannedCacheStuffer
-//        .setCacheStuffer(new BackgroundCacheStuffer())  // 绘制背景使用BackgroundCacheStuffer
-        .setMaximumLines(maxLinesPair)
-        .preventOverlapping(overlappingEnablePair).setDanmakuMargin(40);
+                .setCacheStuffer(new SpannedCacheStuffer(), mCacheStufferAdapter) // 图文混排使用SpannedCacheStuffer
+                .setMaximumLines(maxLinesPair)
+                .preventOverlapping(overlappingEnablePair).setDanmakuMargin(40);
         if (mDanmakuView != null) {
             mParser = createParser(this.getResources().openRawResource(R.raw.comments));
             mDanmakuView.setCallback(new master.flame.danmaku.controller.DrawHandler.Callback() {
@@ -284,7 +239,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
             });
             mVideoView.setVideoPath(Environment.getExternalStorageDirectory() + "/1.flv");
         }
-
     }
 
     @Override
@@ -378,7 +332,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 SystemClock.sleep(20);
             }
         }
-    };
+    }
+
+    ;
 
     private void addDanmaku(boolean islive) {
         BaseDanmaku danmaku = mContext.mDanmakuFactory.createDanmaku(BaseDanmaku.TYPE_SCROLL_RL);

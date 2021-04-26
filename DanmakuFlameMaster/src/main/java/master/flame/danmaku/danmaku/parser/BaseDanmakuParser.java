@@ -31,8 +31,6 @@ public abstract class BaseDanmakuParser {
         void onDanmakuAdd(BaseDanmaku danmaku);
     }
 
-    protected IDataSource<?> mDataSource;
-
     protected DanmakuTimer mTimer;
     protected int mDispWidth;
     protected int mDispHeight;
@@ -72,11 +70,7 @@ public abstract class BaseDanmakuParser {
     protected float getViewportSizeFactor() {
         return 1 / (mDispDensity - 0.6f);
     }
-    
-    public BaseDanmakuParser load(IDataSource<?> source) {
-        mDataSource = source;
-        return this;
-    }
+
     
     public BaseDanmakuParser setTimer(DanmakuTimer timer) {
         mTimer = timer;
@@ -92,21 +86,14 @@ public abstract class BaseDanmakuParser {
             return mDanmakus;
         mContext.mDanmakuFactory.resetDurationsData();
         mDanmakus = parse();
-        releaseDataSource();
         mContext.mDanmakuFactory.updateMaxDanmakuDuration();
         return mDanmakus;
-    }
-    
-    protected void releaseDataSource() {
-        if(mDataSource!=null)
-            mDataSource.release();
-        mDataSource = null;
     }
 
     protected abstract IDanmakus parse();
 
     public void release() {
-        releaseDataSource();
+
     }
 
     public BaseDanmakuParser setConfig(DanmakuContext config) {
