@@ -37,7 +37,6 @@ import master.flame.danmaku.danmaku.model.objectpool.Pools;
 import master.flame.danmaku.danmaku.renderer.IRenderer.RenderingState;
 import master.flame.danmaku.danmaku.util.DanmakuUtils;
 import master.flame.danmaku.danmaku.util.SystemClock;
-import tv.cjump.jni.NativeBitmapFactory;
 
 public class CacheManagingDrawTask extends DrawTask {
 
@@ -54,7 +53,6 @@ public class CacheManagingDrawTask extends DrawTask {
 
     public CacheManagingDrawTask(DanmakuTimer timer, DanmakuContext config, TaskListener taskListener) {
         super(timer, config, taskListener);
-        NativeBitmapFactory.loadLibs();
         mMaxCacheSize = (int) Math.max(1024 * 1024 * 4, Runtime.getRuntime().maxMemory() * config.cachingPolicy.maxCachePoolSizeFactorPercentage);
         mCacheManager = new CacheManager(mMaxCacheSize, MAX_CACHE_SCREEN_SIZE);
         mRenderer.setCacheManager(mCacheManager);
@@ -140,7 +138,6 @@ public class CacheManagingDrawTask extends DrawTask {
     @Override
     public void start() {
         super.start();
-        NativeBitmapFactory.loadLibs();
         if (mCacheManager == null) {
             mCacheManager = new CacheManager(mMaxCacheSize, MAX_CACHE_SCREEN_SIZE);
             mCacheManager.begin();
@@ -159,7 +156,6 @@ public class CacheManagingDrawTask extends DrawTask {
             mCacheManager.end();
             mCacheManager = null;
         }
-        NativeBitmapFactory.releaseLibs();
     }
 
     @Override

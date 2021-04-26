@@ -25,21 +25,13 @@ public class DanmakuContext implements Cloneable {
     }
 
     public enum DanmakuConfigTag {
-        FT_DANMAKU_VISIBILITY,
-        FB_DANMAKU_VISIBILITY,
-        L2R_DANMAKU_VISIBILITY,
         R2L_DANMAKU_VISIBILIY,
-        SPECIAL_DANMAKU_VISIBILITY,
         TYPEFACE, TRANSPARENCY,
         SCALE_TEXTSIZE,
         MAXIMUM_NUMS_IN_SCREEN,
         DANMAKU_STYLE,
         DANMAKU_BOLD,
-        COLOR_VALUE_WHITE_LIST,
-        USER_ID_BLACK_LIST,
-        USER_HASH_BLACK_LIST,
         SCROLL_SPEED_FACTOR,
-        BLOCK_GUEST_DANMAKU,
         DUPLICATE_MERGING_ENABLED,
         MAXIMUN_LINES,
         OVERLAPPING_ENABLE,
@@ -48,10 +40,7 @@ public class DanmakuContext implements Cloneable {
         DANMAKU_SYNC;
 
         public boolean isVisibilityRelatedTag() {
-            return this.equals(FT_DANMAKU_VISIBILITY) || this.equals(FB_DANMAKU_VISIBILITY)
-                    || this.equals(L2R_DANMAKU_VISIBILITY) || this.equals(R2L_DANMAKU_VISIBILIY)
-                    || this.equals(SPECIAL_DANMAKU_VISIBILITY) || this.equals(COLOR_VALUE_WHITE_LIST)
-                    || this.equals(USER_ID_BLACK_LIST);
+            return this.equals(R2L_DANMAKU_VISIBILIY);
         }
     }
 
@@ -87,8 +76,6 @@ public class DanmakuContext implements Cloneable {
     public AbsDanmakuSync danmakuSync;
 
     private List<WeakReference<ConfigChangedCallback>> mCallbackList;
-
-    private boolean mBlockGuestDanmaku = false;
 
     private boolean mDuplicateMergingEnable = false;
 

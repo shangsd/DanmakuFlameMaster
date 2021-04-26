@@ -38,7 +38,7 @@ import master.flame.danmaku.danmaku.model.android.DanmakuContext;
 import master.flame.danmaku.danmaku.parser.BaseDanmakuParser;
 import master.flame.danmaku.danmaku.renderer.IRenderer.RenderingState;
 import master.flame.danmaku.danmaku.util.SystemClock;
-import tv.cjump.jni.DeviceUtils;
+import master.flame.danmaku.danmaku.util.DeviceUtils;
 
 public class DrawHandler extends Handler {
 

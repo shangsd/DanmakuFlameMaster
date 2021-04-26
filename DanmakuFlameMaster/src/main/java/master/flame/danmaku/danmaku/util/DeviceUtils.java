@@ -1,5 +1,5 @@
 
-package tv.cjump.jni;
+package master.flame.danmaku.danmaku.util;
 
 import android.os.Build;
 import android.os.Environment;
