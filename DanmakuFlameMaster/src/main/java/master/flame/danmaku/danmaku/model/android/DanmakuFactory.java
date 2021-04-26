@@ -18,10 +18,7 @@ package master.flame.danmaku.danmaku.model.android;
 
 import master.flame.danmaku.danmaku.model.BaseDanmaku;
 import master.flame.danmaku.danmaku.model.Duration;
-import master.flame.danmaku.danmaku.model.FBDanmaku;
-import master.flame.danmaku.danmaku.model.FTDanmaku;
 import master.flame.danmaku.danmaku.model.IDisplayer;
-import master.flame.danmaku.danmaku.model.L2RDanmaku;
 import master.flame.danmaku.danmaku.model.R2LDanmaku;
 
 public class DanmakuFactory {
@@ -95,13 +92,6 @@ public class DanmakuFactory {
         return createDanmaku(type, sLastDisp.getWidth(), sLastDisp.getHeight(), CURRENT_DISP_SIZE_FACTOR, context.scrollSpeedFactor);
     }
 
-    public BaseDanmaku createDanmaku(int type, IDisplayer disp, float viewportScale, float scrollSpeedFactor) {
-        if (disp == null)
-            return null;
-        sLastDisp = disp;
-        return createDanmaku(type, disp.getWidth(), disp.getHeight(), viewportScale, scrollSpeedFactor);
-    }
-
     /**
      * 创建弹幕数据请尽量使用此方法,参考BiliDanmakuParser或AcfunDanmakuParser
      *
@@ -147,15 +137,6 @@ public class DanmakuFactory {
         switch (type) {
             case 1: // 从右往左滚动
                 instance = new R2LDanmaku(MAX_Duration_Scroll_Danmaku);
-                break;
-            case 4: // 底端固定
-                instance = new FBDanmaku(MAX_Duration_Fix_Danmaku);
-                break;
-            case 5: // 顶端固定
-                instance = new FTDanmaku(MAX_Duration_Fix_Danmaku);
-                break;
-            case 6: // 从左往右滚动
-                instance = new L2RDanmaku(MAX_Duration_Scroll_Danmaku);
                 break;
         }
         return instance;

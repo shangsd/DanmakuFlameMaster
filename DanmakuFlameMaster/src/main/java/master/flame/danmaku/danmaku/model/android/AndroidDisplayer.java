@@ -202,7 +202,6 @@ public class AndroidDisplayer extends AbsDisplayer<Canvas, Typeface> {
         }
 
         public void applyPaintConfig(BaseDanmaku danmaku, Paint paint, boolean stroke) {
-
             if (isTranslucent) {
                 if (stroke) {
                     paint.setStyle(HAS_PROJECTION ? Style.FILL : Style.FILL_AND_STROKE);
@@ -226,10 +225,6 @@ public class AndroidDisplayer extends AbsDisplayer<Canvas, Typeface> {
                     paint.setColor(danmaku.textColor & 0x00FFFFFF);
                     paint.setAlpha(AlphaValue.MAX);
                 }
-            }
-
-            if (danmaku.getType() == BaseDanmaku.TYPE_SPECIAL) {
-                paint.setAlpha(danmaku.getAlpha());
             }
 
         }
@@ -410,48 +405,14 @@ public class AndroidDisplayer extends AbsDisplayer<Canvas, Typeface> {
         float top = danmaku.getTop();
         float left = danmaku.getLeft();
         if (canvas != null) {
-
-            Paint alphaPaint = null;
-            boolean needRestore = false;
-            if (danmaku.getType() == BaseDanmaku.TYPE_SPECIAL) {
-                if (danmaku.getAlpha() == AlphaValue.TRANSPARENT) {
-                    return IRenderer.NOTHING_RENDERING;
-                }
-                if (danmaku.rotationZ != 0 || danmaku.rotationY != 0) {
-                    saveCanvas(danmaku, canvas, left, top);
-                    needRestore = true;
-                }
-
-                int alpha = danmaku.getAlpha();
-                if (alpha != AlphaValue.MAX) {
-                    alphaPaint = mDisplayConfig.ALPHA_PAINT;
-                    alphaPaint.setAlpha(danmaku.getAlpha());
-                }
-            }
-
-            // skip drawing when danmaku is transparent
-            if (alphaPaint != null && alphaPaint.getAlpha() == AlphaValue.TRANSPARENT) {
-                return IRenderer.NOTHING_RENDERING;
-            }
-
             // drawing cache
-            boolean cacheDrawn = sStuffer.drawCache(danmaku, canvas, left, top, alphaPaint, mDisplayConfig.PAINT);
+            boolean cacheDrawn = sStuffer.drawCache(danmaku, canvas, left, top, null, mDisplayConfig.PAINT);
             int result = IRenderer.CACHE_RENDERING;
             if (!cacheDrawn) {
-                if (alphaPaint != null) {
-                    mDisplayConfig.PAINT.setAlpha(alphaPaint.getAlpha());
-                    mDisplayConfig.PAINT_DUPLICATE.setAlpha(alphaPaint.getAlpha());
-                } else {
-                    resetPaintAlpha(mDisplayConfig.PAINT);
-                }
+                resetPaintAlpha(mDisplayConfig.PAINT);
                 drawDanmaku(danmaku, canvas, left, top, false);
                 result = IRenderer.TEXT_RENDERING;
             }
-
-            if (needRestore) {
-                restoreCanvas(canvas);
-            }
-
             return result;
         }
 
@@ -477,14 +438,14 @@ public class AndroidDisplayer extends AbsDisplayer<Canvas, Typeface> {
 
     private int saveCanvas(BaseDanmaku danmaku, Canvas canvas, float left, float top) {
         camera.save();
-        if (locationZ !=0 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
+        if (locationZ != 0 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
             camera.setLocation(0, 0, locationZ);
         }
         camera.rotateY(-danmaku.rotationY);
         camera.rotateZ(-danmaku.rotationZ);
         camera.getMatrix(matrix);
         matrix.preTranslate(-left, -top);
-        matrix.postTranslate(left , top);
+        matrix.postTranslate(left, top);
         camera.restore();
         int count = canvas.save();
         canvas.concat(matrix);

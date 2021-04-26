@@ -26,45 +26,19 @@ public class DanmakusRetainer {
 
     private IDanmakusRetainer rldrInstance = null;
 
-    private IDanmakusRetainer lrdrInstance = null;
-
-    private IDanmakusRetainer ftdrInstance = null;
-
-    private IDanmakusRetainer fbdrInstance = null;
-
     public DanmakusRetainer(boolean alignBottom) {
         alignBottom(alignBottom);
     }
 
     public void alignBottom(boolean alignBottom) {
         rldrInstance = alignBottom ? new AlignBottomRetainer() : new AlignTopRetainer();
-        lrdrInstance = alignBottom ? new AlignBottomRetainer() : new AlignTopRetainer();
-        if (ftdrInstance == null) {
-            ftdrInstance = new FTDanmakusRetainer();
-        }
-        if (fbdrInstance == null) {
-            fbdrInstance = new AlignBottomRetainer();
-        }
     }
 
     public void fix(BaseDanmaku danmaku, IDisplayer disp, Verifier verifier) {
-
         int type = danmaku.getType();
         switch (type) {
             case BaseDanmaku.TYPE_SCROLL_RL:
                 rldrInstance.fix(danmaku, disp, verifier);
-                break;
-            case BaseDanmaku.TYPE_SCROLL_LR:
-                lrdrInstance.fix(danmaku, disp, verifier);
-                break;
-            case BaseDanmaku.TYPE_FIX_TOP:
-                ftdrInstance.fix(danmaku, disp, verifier);
-                break;
-            case BaseDanmaku.TYPE_FIX_BOTTOM:
-                fbdrInstance.fix(danmaku, disp, verifier);
-                break;
-            case BaseDanmaku.TYPE_SPECIAL:
-                danmaku.layout(disp, 0, 0);
                 break;
         }
 
@@ -74,32 +48,23 @@ public class DanmakusRetainer {
         if (rldrInstance != null) {
             rldrInstance.clear();
         }
-        if (lrdrInstance != null) {
-            lrdrInstance.clear();
-        }
-        if (ftdrInstance != null) {
-            ftdrInstance.clear();
-        }
-        if (fbdrInstance != null) {
-            fbdrInstance.clear();
-        }
     }
-    
-    public void release(){
+
+    public void release() {
         clear();
     }
 
     public interface Verifier {
 
-        public boolean skipLayout(BaseDanmaku danmaku, float fixedTop, int lines, boolean willHit);
+        boolean skipLayout(BaseDanmaku danmaku, float fixedTop, int lines, boolean willHit);
 
     }
 
     public interface IDanmakusRetainer {
 
-        public void fix(BaseDanmaku drawItem, IDisplayer disp, Verifier verifier);
+        void fix(BaseDanmaku drawItem, IDisplayer disp, Verifier verifier);
 
-        public void clear();
+        void clear();
 
     }
 
@@ -134,7 +99,7 @@ public class DanmakusRetainer {
                     return ACTION_BREAK;
                 }
                 lines++;
-                if(item == drawItem){
+                if (item == drawItem) {
                     insertItem = item;
                     lastItem = null;
                     shown = true;
@@ -225,7 +190,7 @@ public class DanmakusRetainer {
                         topPos = lastItem.getBottom() + margin;
                     else
                         topPos = insertItem.getTop();
-                    if (insertItem != drawItem){
+                    if (insertItem != drawItem) {
                         removeItem = insertItem;
                         shown = false;
                     }

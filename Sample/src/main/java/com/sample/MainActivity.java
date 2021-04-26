@@ -120,7 +120,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
     };
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -171,7 +170,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         // 设置是否禁止重叠
         HashMap<Integer, Boolean> overlappingEnablePair = new HashMap<Integer, Boolean>();
         overlappingEnablePair.put(BaseDanmaku.TYPE_SCROLL_RL, true);
-        overlappingEnablePair.put(BaseDanmaku.TYPE_FIX_TOP, true);
 
         mDanmakuView = (IDanMuView) findViewById(R.id.sv_danmaku);
         mContext = DanmakuContext.create();

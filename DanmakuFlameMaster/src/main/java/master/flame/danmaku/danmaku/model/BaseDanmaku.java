@@ -24,15 +24,11 @@ public abstract class BaseDanmaku {
 
     public final static int TYPE_SCROLL_RL = 1;
 
-    public final static int TYPE_SCROLL_LR = 6;
-
-    public final static int TYPE_FIX_TOP = 5;
-
-    public final static int TYPE_FIX_BOTTOM = 4;
-
-    public final static int TYPE_SPECIAL = 7;
-
-    public final static int TYPE_MOVEABLE_XXX = 0; // TODO: add more type
+//    public final static int TYPE_SCROLL_LR = 6;
+//
+//    public final static int TYPE_FIX_TOP = 5;
+//
+//    public final static int TYPE_FIX_BOTTOM = 4;
 
     public final static int INVISIBLE = 0;
 
