@@ -387,7 +387,6 @@ public class CacheManagingDrawTask extends DrawTask {
             }
             this.mCaches.addItem(item);
             mRealSize += size;
-//Log.i("DFM CACHE", "realsize:"+mRealSize + ",size" + size);
             return true;
         }
 

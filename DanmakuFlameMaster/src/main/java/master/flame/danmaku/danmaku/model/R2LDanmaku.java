@@ -19,9 +19,6 @@ package master.flame.danmaku.danmaku.model;
 
 public class R2LDanmaku extends BaseDanmaku {
 
-    protected static final long MAX_RENDERING_TIME = 100;
-
-    protected static final long CORDON_RENDERING_TIME = 40;
 
     protected float x = 0;
 

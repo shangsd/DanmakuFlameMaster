@@ -21,19 +21,9 @@ import android.util.SparseArray;
 public abstract class BaseDanmaku {
 
     public final static String DANMAKU_BR_CHAR = "/n";
-
     public final static int TYPE_SCROLL_RL = 1;
-
-//    public final static int TYPE_SCROLL_LR = 6;
-//
-//    public final static int TYPE_FIX_TOP = 5;
-//
-//    public final static int TYPE_FIX_BOTTOM = 4;
-
     public final static int INVISIBLE = 0;
-
     public final static int VISIBLE = 1;
-
     public final static int FLAG_REQUEST_REMEASURE = 0x1;
     public final static int FLAG_REQUEST_INVALIDATE = 0x2;
 

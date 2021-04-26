@@ -3,24 +3,24 @@ package master.flame.danmaku.danmaku.model;
 
 public interface IDrawingCache<T> {
 
-    public void build(int w, int h, int density, boolean checkSizeEquals, int bitsPerPixel);
-    
-    public void erase();
+    void build(int w, int h, int density, boolean checkSizeEquals, int bitsPerPixel);
 
-    public T get();
+    void erase();
 
-    public void destroy();
+    T get();
 
-    public int size();
-    
-    public int width();
-    
-    public int height();
-    
-    public boolean hasReferences();
-    
-    public void increaseReference();
-    
-    public void decreaseReference();
+    void destroy();
+
+    int size();
+
+    int width();
+
+    int height();
+
+    boolean hasReferences();
+
+    void increaseReference();
+
+    void decreaseReference();
 
 }
