@@ -86,8 +86,6 @@ public class DanmakuContext implements Cloneable {
 
     public AbsDanmakuSync danmakuSync;
 
-    List<Integer> mColorValueWhiteList = new ArrayList<Integer>();
-
     private List<WeakReference<ConfigChangedCallback>> mCallbackList;
 
     private boolean mBlockGuestDanmaku = false;
@@ -287,29 +285,6 @@ public class DanmakuContext implements Cloneable {
         mDisplayer.setFakeBoldText(bold);
         notifyConfigureChanged(DanmakuConfigTag.DANMAKU_BOLD, bold);
         return this;
-    }
-
-    /**
-     * 设置色彩过滤弹幕白名单
-     *
-     * @param colors
-     * @return
-     */
-    public DanmakuContext setColorValueWhiteList(Integer... colors) {
-        mColorValueWhiteList.clear();
-        if (colors == null || colors.length == 0) {
-            mDanmakuFilters.unregisterFilter(DanmakuFilters.TAG_TEXT_COLOR_DANMAKU_FILTER);
-        } else {
-            Collections.addAll(mColorValueWhiteList, colors);
-            setFilterData(DanmakuFilters.TAG_TEXT_COLOR_DANMAKU_FILTER, mColorValueWhiteList);
-        }
-        mGlobalFlagValues.updateFilterFlag();
-        notifyConfigureChanged(DanmakuConfigTag.COLOR_VALUE_WHITE_LIST, mColorValueWhiteList);
-        return this;
-    }
-
-    public List<Integer> getColorValueWhiteList() {
-        return mColorValueWhiteList;
     }
 
     /**
