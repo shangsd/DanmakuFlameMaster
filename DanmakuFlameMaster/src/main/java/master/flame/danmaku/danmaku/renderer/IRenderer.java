@@ -30,6 +30,24 @@ public interface IRenderer {
     int CACHE_RENDERING = 1;
     int TEXT_RENDERING = 2;
 
+    void draw(IDisplayer disp, IDanmakus danmakus, long startRenderTime, RenderingState renderingState);
+
+    void clear();
+
+    void clearRetainer();
+
+    void release();
+
+    void setVerifierEnabled(boolean enabled);
+
+    void setCacheManager(ICacheManager cacheManager);
+
+    void setOnDanmakuShownListener(OnDanmakuShownListener onDanmakuShownListener);
+
+    void removeOnDanmakuShownListener();
+
+    void alignBottom(boolean enable);
+
     interface OnDanmakuShownListener {
         void onDanmakuShown(BaseDanmaku danmaku);
     }
@@ -114,23 +132,5 @@ public interface IRenderer {
         }
 
     }
-
-    void draw(IDisplayer disp, IDanmakus danmakus, long startRenderTime, RenderingState renderingState);
-
-    void clear();
-
-    void clearRetainer();
-
-    void release();
-
-    void setVerifierEnabled(boolean enabled);
-
-    void setCacheManager(ICacheManager cacheManager);
-
-    void setOnDanmakuShownListener(OnDanmakuShownListener onDanmakuShownListener);
-
-    void removeOnDanmakuShownListener();
-
-    void alignBottom(boolean enable);
 
 }

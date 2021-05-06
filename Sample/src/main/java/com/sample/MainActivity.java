@@ -41,7 +41,6 @@ import master.flame.danmaku.danmaku.model.android.DanmakuContext;
 import master.flame.danmaku.danmaku.model.android.Danmakus;
 import master.flame.danmaku.danmaku.model.android.SpannedCacheStuffer;
 import master.flame.danmaku.danmaku.parser.BaseDanmakuParser;
-import master.flame.danmaku.danmaku.util.IOUtils;
 import master.flame.danmaku.danmaku.util.SystemClock;
 
 public class MainActivity extends Activity implements View.OnClickListener {
@@ -96,7 +95,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
                             } catch (IOException e) {
                                 e.printStackTrace();
                             } finally {
-                                IOUtils.closeQuietly(inputStream);
+                                try {
+                                    if (inputStream != null)
+                                        inputStream.close();
+                                } catch (IOException ignore) {
+                                }
                             }
                         }
                         if (drawable != null) {

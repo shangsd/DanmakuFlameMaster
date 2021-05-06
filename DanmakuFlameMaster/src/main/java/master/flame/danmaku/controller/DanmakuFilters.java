@@ -1,9 +1,6 @@
 
 package master.flame.danmaku.controller;
 
-import master.flame.danmaku.danmaku.model.Duration;
-import master.flame.danmaku.danmaku.util.SystemClock;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -15,19 +12,17 @@ import java.util.TreeMap;
 
 import master.flame.danmaku.danmaku.model.BaseDanmaku;
 import master.flame.danmaku.danmaku.model.DanmakuTimer;
+import master.flame.danmaku.danmaku.model.Duration;
 import master.flame.danmaku.danmaku.model.IDanmakus;
 import master.flame.danmaku.danmaku.model.android.DanmakuContext;
 import master.flame.danmaku.danmaku.model.android.Danmakus;
+import master.flame.danmaku.danmaku.util.SystemClock;
 
 public class DanmakuFilters {
 
     public static final int FILTER_TYPE_TYPE = 1;
     public static final int FILYER_TYPE_QUANTITY = 2;
     public static final int FILTER_TYPE_ELAPSED_TIME = 4;
-    public static final int FILTER_TYPE_TEXTCOLOR = 8;
-    public static final int FILTER_TYPE_USER_ID = 16;
-    public static final int FILTER_TYPE_USER_HASH = 32;
-    public static final int FILTER_TYPE_USER_GUEST = 64;
     public static final int FILTER_TYPE_DUPLICATE_MERGE = 128;
     public static final int FILTER_TYPE_MAXIMUM_LINES = 256;
     public static final int FILTER_TYPE_OVERLAPPING = 512;
@@ -59,7 +54,7 @@ public class DanmakuFilters {
 
     /**
      * 根据弹幕类型过滤
-     * 
+     *
      * @author ch
      */
     public static class TypeDanmakuFilter extends BaseDanmakuFilter<List<Integer>> {
@@ -105,7 +100,7 @@ public class DanmakuFilters {
 
     /**
      * 根据同屏数量过滤弹幕
-     * 
+     *
      * @author ch
      */
     public static class QuantityDanmakuFilter extends BaseDanmakuFilter<Integer> {
@@ -116,7 +111,7 @@ public class DanmakuFilters {
         private float mFilterFactor = 1f;
 
         private boolean needFilter(BaseDanmaku danmaku, int orderInScreen,
-                                 int totalSizeInScreen, DanmakuTimer timer, boolean fromCachingTask, DanmakuContext context) {
+                                   int totalSizeInScreen, DanmakuTimer timer, boolean fromCachingTask, DanmakuContext context) {
 
             if (mMaximumSize <= 0 || danmaku.getType() != BaseDanmaku.TYPE_SCROLL_RL) {
                 return false;
@@ -174,7 +169,7 @@ public class DanmakuFilters {
 
     /**
      * 根据绘制耗时过滤弹幕
-     * 
+     *
      * @author ch
      */
     public static class ElapsedTimeFilter extends BaseDanmakuFilter<Object> {
@@ -182,7 +177,7 @@ public class DanmakuFilters {
         long mMaxTime = 20; // 绘制超过20ms就跳过 ，默认保持接近50fps
 
         private synchronized boolean needFilter(BaseDanmaku danmaku, int orderInScreen,
-                                   int totalsizeInScreen, DanmakuTimer timer, boolean fromCachingTask) {
+                                                int totalsizeInScreen, DanmakuTimer timer, boolean fromCachingTask) {
             if (timer == null || !danmaku.isOutside()) {
                 return false;
             }
@@ -221,153 +216,6 @@ public class DanmakuFilters {
 
     }
 
-    /**
-     * 根据文本颜色白名单过滤
-     * 
-     * @author ch
-     */
-    public static class TextColorFilter extends BaseDanmakuFilter<List<Integer>> {
-
-        public List<Integer> mWhiteList = new ArrayList<Integer>();
-
-        private void addToWhiteList(Integer color) {
-            if (!mWhiteList.contains(color)) {
-                mWhiteList.add(color);
-            }
-        }
-
-        @Override
-        public boolean filter(BaseDanmaku danmaku, int index, int totalsizeInScreen,
-                              DanmakuTimer timer, boolean fromCachingTask, DanmakuContext config) {
-            boolean filtered = danmaku != null && !mWhiteList.contains(danmaku.textColor);
-            if (filtered) {
-                danmaku.mFilterParam |= FILTER_TYPE_TEXTCOLOR;
-            }
-            return filtered;
-        }
-
-        @Override
-        public void setData(List<Integer> data) {
-            reset();
-            if (data != null) {
-                for (Integer i : data) {
-                    addToWhiteList(i);
-                }
-            }
-        }
-
-        @Override
-        public void reset() {
-            mWhiteList.clear();
-        }
-
-    }
-
-    /**
-     * 根据用户标识黑名单过滤
-     * 
-     * @author ch
-     */
-    public static abstract class UserFilter<T> extends BaseDanmakuFilter<List<T>> {
-
-        public List<T> mBlackList = new ArrayList<T>();
-
-        private void addToBlackList(T id) {
-            if (!mBlackList.contains(id)) {
-                mBlackList.add(id);
-            }
-        }
-
-        @Override
-        public abstract boolean filter(BaseDanmaku danmaku, int index, int totalsizeInScreen,
-                                       DanmakuTimer timer, boolean fromCachingTask, DanmakuContext config);
-
-        @Override
-        public void setData(List<T> data) {
-            reset();
-            if (data != null) {
-                for (T i : data) {
-                    addToBlackList(i);
-                }
-            }
-        }
-
-        @Override
-        public void reset() {
-            mBlackList.clear();
-        }
-
-    }
-
-    /**
-     * 根据用户Id黑名单过滤
-     * 
-     * @author ch
-     */
-    public static class UserIdFilter extends UserFilter<Integer> {
-
-        @Override
-        public boolean filter(BaseDanmaku danmaku, int index, int totalsizeInScreen,
-                              DanmakuTimer timer, boolean fromCachingTask, DanmakuContext config) {
-            boolean filtered = danmaku != null && mBlackList.contains(danmaku.userId);
-            if (filtered) {
-                danmaku.mFilterParam |= FILTER_TYPE_USER_ID;
-            }
-            return filtered;
-        }
-
-    }
-
-    /**
-     * 根据用户hash黑名单过滤
-     * 
-     * @author ch
-     */
-    public static class UserHashFilter extends UserFilter<String> {
-
-        @Override
-        public boolean filter(BaseDanmaku danmaku, int index, int totalsizeInScreen,
-                              DanmakuTimer timer, boolean fromCachingTask, DanmakuContext config) {
-            boolean filtered = danmaku != null && mBlackList.contains(danmaku.userHash);
-            if (filtered) {
-                danmaku.mFilterParam |= FILTER_TYPE_USER_HASH;
-            }
-            return filtered;
-        }
-
-    }
-
-    /**
-     * 屏蔽游客弹幕
-     * 
-     * @author ch
-     */
-    public static class GuestFilter extends BaseDanmakuFilter<Boolean> {
-
-        private Boolean mBlock = false;
-
-        @Override
-        public boolean filter(BaseDanmaku danmaku, int index, int totalsizeInScreen,
-                              DanmakuTimer timer, boolean fromCachingTask, DanmakuContext config) {
-            boolean filtered = mBlock && danmaku.isGuest;
-            if (filtered) {
-                danmaku.mFilterParam |= FILTER_TYPE_USER_GUEST;
-            }
-            return filtered;
-        }
-
-        @Override
-        public void setData(Boolean data) {
-            mBlock = data;
-        }
-
-        @Override
-        public void reset() {
-            mBlock = false;
-        }
-
-    }
-
     public static class DuplicateMergingFilter extends BaseDanmakuFilter<Void> {
 
         protected final IDanmakus blockedDanmakus = new Danmakus(Danmakus.ST_BY_LIST);
@@ -377,6 +225,7 @@ public class DanmakuFilters {
         private final void removeTimeoutDanmakus(final IDanmakus danmakus, final long limitTime) {
             danmakus.forEachSync(new IDanmakus.DefaultConsumer<BaseDanmaku>() {
                 long startTime = SystemClock.uptimeMillis();
+
                 @Override
                 public int accept(BaseDanmaku item) {
                     try {
@@ -396,7 +245,7 @@ public class DanmakuFilters {
         }
 
         private void removeTimeoutDanmakus(LinkedHashMap<String, BaseDanmaku> danmakus,
-                int limitTime) {
+                                           int limitTime) {
             Iterator<Entry<String, BaseDanmaku>> it = danmakus.entrySet().iterator();
             long startTime = SystemClock.uptimeMillis();
             while (it.hasNext()) {
@@ -418,7 +267,7 @@ public class DanmakuFilters {
         }
 
         public synchronized boolean needFilter(BaseDanmaku danmaku, int index, int totalsizeInScreen,
-                DanmakuTimer timer, boolean fromCachingTask) {
+                                               DanmakuTimer timer, boolean fromCachingTask) {
             removeTimeoutDanmakus(blockedDanmakus, 2);
             removeTimeoutDanmakus(passedDanmakus, 2);
             removeTimeoutDanmakus(currentDanmakus, 3);
@@ -532,14 +381,6 @@ public class DanmakuFilters {
 
     public final static String TAG_ELAPSED_TIME_FILTER = "1012_Filter";
 
-    public final static String TAG_TEXT_COLOR_DANMAKU_FILTER = "1013_Filter";
-
-    public final static String TAG_USER_ID_FILTER = "1014_Filter";
-
-    public final static String TAG_USER_HASH_FILTER = "1015_Filter";
-
-    public final static String TAG_GUEST_FILTER = "1016_Filter";
-
     public final static String TAG_DUPLICATE_FILTER = "1017_Filter";
 
     public final static String TAG_MAXIMUN_LINES_FILTER = "1018_Filter";
@@ -613,14 +454,6 @@ public class DanmakuFilters {
                 filter = new QuantityDanmakuFilter();
             } else if (TAG_ELAPSED_TIME_FILTER.equals(tag)) {
                 filter = new ElapsedTimeFilter();
-            } else if (TAG_TEXT_COLOR_DANMAKU_FILTER.equals(tag)) {
-                filter = new TextColorFilter();
-            } else if (TAG_USER_ID_FILTER.equals(tag)) {
-                filter = new UserIdFilter();
-            } else if (TAG_USER_HASH_FILTER.equals(tag)) {
-                filter = new UserHashFilter();
-            } else if (TAG_GUEST_FILTER.equals(tag)) {
-                filter = new GuestFilter();
             } else if (TAG_DUPLICATE_FILTER.equals(tag)) {
                 filter = new DuplicateMergingFilter();
             } else if (TAG_MAXIMUN_LINES_FILTER.equals(tag)) {

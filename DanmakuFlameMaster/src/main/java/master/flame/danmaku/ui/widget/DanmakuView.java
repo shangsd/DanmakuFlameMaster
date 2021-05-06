@@ -34,8 +34,8 @@ import java.util.Locale;
 import master.flame.danmaku.controller.DrawHandler;
 import master.flame.danmaku.controller.DrawHandler.Callback;
 import master.flame.danmaku.controller.DrawHelper;
-import master.flame.danmaku.controller.IDanMuViewController;
 import master.flame.danmaku.controller.IDanMuView;
+import master.flame.danmaku.controller.IDanMuViewController;
 import master.flame.danmaku.danmaku.model.BaseDanmaku;
 import master.flame.danmaku.danmaku.model.IDanmakus;
 import master.flame.danmaku.danmaku.model.android.DanmakuContext;
@@ -44,8 +44,6 @@ import master.flame.danmaku.danmaku.renderer.IRenderer.RenderingState;
 import master.flame.danmaku.danmaku.util.SystemClock;
 
 public class DanmakuView extends View implements IDanMuView, IDanMuViewController {
-
-    public static final String TAG = "DanmakuView";
 
     private Callback mCallback;
 
@@ -62,8 +60,6 @@ public class DanmakuView extends View implements IDanMuView, IDanMuViewControlle
     private float mXOff;
 
     private float mYOff;
-
-    private OnClickListener mOnClickListener;
 
     private DanmakuTouchHelper mTouchHelper;
 
